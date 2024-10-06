@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+//#include "stdio.h"
 
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
@@ -31,11 +32,11 @@
 #define C_RCTL_MINS RCTL_T(KC_MINS)
 #define C_LCTL_BSPC LCTL(KC_BSPC)
 
-//enum layers {
-//    SYMB,
-//    MDIA,
-//    NAVI,
-//};
+enum layers {
+    BASE,
+    NUMS,
+    ARRWS,
+};
 
 enum custom_keycodes {
     RGB_SLD = ML_SAFE_RANGE,
@@ -61,40 +62,34 @@ enum custom_keycodes {
     MG_QUOT_S,
 };
 
-
-
 enum tap_dance_codes {
   DANCE_0,
   DANCE_1,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT_voyager(
-    TD(DANCE_0),    KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,       
-    KC_V,           KC_M,           KC_L,           KC_C,           KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC, KC_U,           KC_O,           KC_Q,           KC_BSLS,
-    MT(MOD_LSFT, KC_S),KC_T,           KC_R,           KC_D,           KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
-    MT(MOD_LCTL, KC_X),MT(MOD_LALT, KC_K),KC_J,           KC_G,           KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
-                                                    ALL_T(KC_ENTER),MT(MOD_LGUI, KC_BSPC),                                QK_REP,          LT(2,KC_SPACE)
+  [BASE] = LAYOUT_voyager(
+    TD(DANCE_0),        KC_F1,       KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,
+    KC_V,               KC_M,        KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_Q,           KC_BSLS,
+    MT(MOD_LSFT, KC_S), KC_T,        KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
+    MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K),KC_J,     KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
+                                                              HYPR_T(KC_ENTER),  MT(MOD_LGUI, KC_BSPC),                          QK_REP,   LT(ARRWS,KC_SPC)
   ),
-  [1] = LAYOUT_voyager(
-    KC_ESCAPE,      KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,         
-    KC_GRAVE,       KC_EXLM,        KC_AT,          KC_HASH,        KC_DLR,         KC_PERC,                                        KC_MINUS,       KC_7,           KC_8,           KC_9,           KC_SLASH,       KC_F12,         
-    TD(DANCE_1),    KC_CIRC,        KC_AMPR,        KC_ASTR,        KC_LPRN,        KC_RPRN,                                        KC_PLUS,        KC_4,           KC_5,           KC_6,           KC_ASTR,        MT(MOD_RSFT, KC_BSPC),
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_RBRC,        KC_LBRC,        KC_LCBR,        KC_RCBR,                                        KC_0,           KC_1,           KC_2,           KC_3,           KC_EQUAL,       KC_ENTER,       
-                                                    KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_DOT
+  [NUMS] = LAYOUT_voyager(
+    KC_ESCAPE,        KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,
+    KC_GRAVE,         KC_EXLM,        KC_AT,          KC_HASH,        KC_DLR,         KC_PERC,                                        KC_MINUS,       KC_7,           KC_8,           KC_9,           KC_SLASH,       KC_F12,
+    TD(DANCE_1),      KC_CIRC,        KC_AMPR,        KC_ASTR,        KC_LPRN,        KC_RPRN,                                        KC_PLUS,        KC_4,           KC_5,           KC_6,           KC_ASTR,        MT(MOD_RSFT, KC_BSPC),
+    KC_TRANSPARENT,   KC_TRANSPARENT, KC_RBRC,        KC_LBRC,        KC_LCBR,        KC_RCBR,                                        KC_0,           KC_1,           KC_2,           KC_3,           KC_EQUAL,       KC_ENTER,
+                                                              KC_TRANSPARENT,   KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_DOT
   ),
-  [2] = LAYOUT_voyager(
-    RGB_TOG,        TOGGLE_LAYER_COLOR,RGB_MODE_FORWARD,RGB_SLD,        RGB_VAD,        RGB_VAI,                                        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, QK_BOOT,        
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_AUDIO_MUTE,  KC_TRANSPARENT,                                 LGUI(KC_LEFT),  LALT(KC_LEFT),  KC_UP,          LALT(KC_RIGHT), LGUI(KC_RIGHT), KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_MEDIA_PREV_TRACK,KC_MEDIA_NEXT_TRACK,KC_MEDIA_STOP,  KC_MEDIA_PLAY_PAUSE,KC_TRANSPARENT,                                 KC_PAGE_UP,     KC_LEFT,        KC_DOWN,        KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT, 
-    HSV_0_245_245,  HSV_74_255_255, HSV_188_255_255,KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_PGDN,        LCTL(LSFT(KC_TAB)),LCTL(KC_TAB),   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-                                                    KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
+  [ARRWS] = LAYOUT_voyager(
+    RGB_TOG,        TOGGLE_LAYER_COLOR,  RGB_MODE_FORWARD,    RGB_SLD,         RGB_VAD,             RGB_VAI,                                        KC_TRANSPARENT, KC_TRANSPARENT,     KC_TRANSPARENT,  KC_TRANSPARENT, KC_TRANSPARENT, QK_BOOT,
+    KC_TRANSPARENT, KC_TRANSPARENT,      KC_AUDIO_VOL_DOWN,   KC_AUDIO_VOL_UP, KC_AUDIO_MUTE,       KC_TRANSPARENT,                                 LGUI(KC_LEFT),  LALT(KC_LEFT),      KC_UP,           LALT(KC_RIGHT), LGUI(KC_RIGHT), KC_TRANSPARENT,
+    KC_TRANSPARENT, KC_MEDIA_PREV_TRACK, KC_MEDIA_NEXT_TRACK, KC_MEDIA_STOP,   KC_MEDIA_PLAY_PAUSE, KC_TRANSPARENT,                                 KC_PAGE_UP,     KC_LEFT,            KC_DOWN,         KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT,
+    HSV_0_245_245,  HSV_74_255_255,      HSV_188_255_255,     KC_TRANSPARENT,  KC_TRANSPARENT,      KC_TRANSPARENT,                                 KC_PGDN,        LCTL(LSFT(KC_TAB)), LCTL(KC_TAB),    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+                                                                                 KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
-
-
-
-
 
 // Custom configuration for magic sturdy setup: copied from magic sturdy repo
 const uint16_t PROGMEM combo_LTEST_12[] = { KC_1, KC_2, COMBO_END};
@@ -413,16 +408,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //                return false;
         }
 
-        if (rep_count > 0) {
+        // Debugging
+//        char buffer[64];
+//        sprintf(buffer, "Keycode: %d, Mod: %d, Rep: %d", keycode, record->event.pressed, rep_count);
+//        SEND_STRING(buffer);
+//
+//        sprintf(buffer, "KC_DQUO: %d, KC_BSPC: %d, KC_LPRN: %d", KC_DQUO, KC_BSPC, KC_LPRN);
+//        SEND_STRING(buffer);
+
+        if (rep_count > 0) { // repeat key used
             switch (keycode) {
-                case KC_BSPC:
-                case C_LCTL_BSPC:
-                case KC_DQUO:
-                case KC_LPRN:
-                case KC_SPC:
-                case KC_ENT:
-                case C_LALT_ENT:
-                case C_RSFT_ENT:
+                case C_LCTL_BSPC: // ???
+                case C_LALT_ENT: // ???
+                case C_RSFT_ENT: // ???
+
+                case KC_DQUO: // Doulbe quote. Keycode: 564
+                case KC_LPRN: // Left parenthesis. Keycode: 55
+
+                case KC_BSPC: // Backspace. Keycode: 42
+                case 10282: // weird (backspace) keycode which only procuded when using MT(MOD_LGUI, KC_BSPC)
+
+                case KC_SPC: // Space. Keycode: 44
+                case 16940: // weird (space) keycode which only procuded when using LT(ARRWS,KC_SPC)
+
+                case KC_ENT: // Enter. Keycode: 40
+                case 12072: // weird (enter) keycode which only procuded when using HYPR_T(KC_ENTER)
                     unregister_weak_mods(MOD_MASK_CSAG);
                     SEND_STRING("for");
                     return false;
