@@ -70,9 +70,9 @@ enum tap_dance_codes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_voyager(
     TD(DANCE_0),        KC_F1,       KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,
-    KC_V,               KC_M,        KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_Q,           KC_BSLS,
-    MT(MOD_LSFT, KC_S), KC_T,        KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
-    MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K),KC_J,     KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
+    KC_V,               KC_M,        KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT, KC_BSLS,
+    KC_S,               KC_T,        KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
+    KC_X,               KC_K,        KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
                                                               HYPR_T(KC_ENTER),  MT(MOD_LGUI, KC_BSPC),                          QK_REP,   LT(ARRWS,KC_SPC)
   ),
   [NUMS] = LAYOUT_voyager(
@@ -142,9 +142,9 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     switch (keycode) {
         case KC_C:
         case KC_P:
-        case KC_D:
+        case KC_D: // should be ignored - it's a roll
         case KC_G:
-        case KC_Z: return KC_Y;
+        case KC_Z: return KC_Y; // should be ignored - diff parts of keyboard, z->y is easier than z->*
         case KC_Y: return KC_P;
         case KC_R: return KC_L;
         case KC_K: return KC_S;
@@ -187,6 +187,14 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 }
 
 bool process_magic_key_2(uint16_t prev_keycode, uint8_t prev_mods) {
+    // Debugging
+//    char buffer[64];
+//    sprintf(buffer, "Prev Keycode: %d\n", prev_keycode);
+//    SEND_STRING(buffer);
+//
+//    sprintf(buffer, "KC_N: %d, C_MAG_2: %d, KC_DOT: %d", KC_N, C_MAG_2, KC_DOT);
+//    SEND_STRING(buffer);
+
     switch (prev_keycode) {
         case KC_B:
             SEND_STRING("ecome");
@@ -253,12 +261,20 @@ bool process_magic_key_2(uint16_t prev_keycode, uint8_t prev_mods) {
             SEND_STRING(" however");
             return false;
         default:
-            SEND_STRING("'ll");
+            SEND_STRING("'ll"); //
             return false;
     }
 }
 
 bool process_magic_key_3(uint16_t prev_keycode, uint8_t prev_mods) {
+    // Debugging
+//    char buffer[64];
+//    sprintf(buffer, "Prev Keycode: %d\n", prev_keycode);
+//    SEND_STRING(buffer);
+//
+//    sprintf(buffer, "KC_N: %d, C_MAG_2: %d, KC_DOT: %d", KC_N, C_MAG_2, KC_DOT);
+//    SEND_STRING(buffer);
+
     switch (prev_keycode) {
         case KC_B:
             SEND_STRING("etween");
