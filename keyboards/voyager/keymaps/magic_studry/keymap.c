@@ -69,10 +69,10 @@ enum tap_dance_codes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_voyager(
-    TD(DANCE_0),        KC_F1,       KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,
-    KC_V,               KC_M,        KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT, KC_BSLS,
-    KC_S,               KC_T,        KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
-    KC_X,               KC_K,        KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
+    TD(DANCE_0),        KC_F1,              KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,
+    KC_V,               KC_M,               KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT, KC_BSLS,
+    MT(MOD_LSFT, KC_S), KC_T,               KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
+    MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K), KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
                                                               HYPR_T(KC_ENTER),  MT(MOD_LGUI, KC_BSPC),                          QK_REP,   LT(ARRWS,KC_SPC)
   ),
   [NUMS] = LAYOUT_voyager(
@@ -122,7 +122,7 @@ void keyboard_post_init_user(void) {
   rgb_matrix_enable();
 }
 
-bool get_repeat_key_eligible_user(uint16_t keycode, keyrecord_t* record, uint8_t* remembered_mods) {
+bool remember_last_key_user(uint16_t keycode, keyrecord_t* record, uint8_t* remembered_mods) {
     switch (keycode) {
         // Ignore Custom Magic Keys
         case C_MAG_2:
@@ -139,6 +139,16 @@ bool get_repeat_key_eligible_user(uint16_t keycode, keyrecord_t* record, uint8_t
 }
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    // Debugging
+//    char buffer[128];
+//    sprintf(buffer, "Keycode: %d\n", keycode);
+//    SEND_STRING(buffer);
+//
+//    sprintf(buffer, "KC_X: %d, KC_K: %d, KC_S: %d\n", KC_X, KC_K, KC_S);
+//    SEND_STRING(buffer);
+//
+//    sprintf(buffer, "MT(MOD_LSFT, KC_S): %d, MT(MOD_LCTL, KC_X): %d, MT(MOD_LALT, KC_K): %d\n", MT(MOD_LSFT, KC_S), MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K));
+//    SEND_STRING(buffer);
     switch (keycode) {
         case KC_C:
         case KC_P:
@@ -147,9 +157,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_Z: return KC_Y; // should be ignored - diff parts of keyboard, z->y is easier than z->*
         case KC_Y: return KC_P;
         case KC_R: return KC_L;
-        case KC_K: return KC_S;
+        case KC_K:
+        case MT(MOD_LALT, KC_K): return KC_S;
         case KC_L:
-        case KC_S: return KC_K;
+        case KC_S:
+        case MT(MOD_LSFT, KC_S): return KC_K;
         case KC_U: return KC_E;
         case KC_E: return KC_U;
         case KC_O: return KC_A;
@@ -174,7 +186,8 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         case KC_I: return MG_ON;
         case KC_N: return MG_ION;
         case KC_V: return MG_ER;
-        case KC_X: return MG_ES;
+        case KC_X:
+        case MT(MOD_LCTL, KC_X): return MG_ES;
         case KC_M: return MG_ENT;
         case KC_T: return MG_MENT;
         case KC_J: return MG_UST;
