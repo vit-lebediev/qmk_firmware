@@ -95,8 +95,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM combo_LTEST_12[] = { KC_1, KC_2, COMBO_END};
 const uint16_t PROGMEM combo_RT_12[] = { QK_REP, OSM(MOD_LSFT), COMBO_END};
 const uint16_t PROGMEM combo_LB_IM[] = { KC_J, KC_G, COMBO_END};
-const uint16_t PROGMEM combo_LB_MR[] = { KC_K, KC_J, COMBO_END};
-const uint16_t PROGMEM combo_LB_RP[] = { KC_X, KC_K, COMBO_END};
+const uint16_t PROGMEM combo_LB_MR[] = { KC_R, KC_D, COMBO_END};
+const uint16_t PROGMEM combo_LB_RP[] = { KC_T, KC_R, COMBO_END};
 const uint16_t PROGMEM combo_LB_IR[] = { KC_K, KC_G, COMBO_END};
 const uint16_t PROGMEM combo_RB_IM[] = { KC_H, KC_QUOT, COMBO_END};
 const uint16_t PROGMEM combo_RB_MR[] = { KC_QUOT, KC_QUES, COMBO_END};
@@ -236,6 +236,7 @@ bool process_magic_key_2(uint16_t prev_keycode, uint8_t prev_mods) {
         case KC_I:
             SEND_STRING("'ll");
             return false;
+        case MT(MOD_LALT, KC_K):
         case KC_K:
             SEND_STRING("now");
             return false;
@@ -264,6 +265,7 @@ bool process_magic_key_2(uint16_t prev_keycode, uint8_t prev_mods) {
         case KC_W:
             SEND_STRING("here");
             return false;
+        case MT(MOD_LSFT, KC_S):
         case KC_S:
             SEND_STRING("hould");
             return false;
@@ -316,6 +318,7 @@ bool process_magic_key_3(uint16_t prev_keycode, uint8_t prev_mods) {
         case KC_C:
             SEND_STRING("rowd");
             return false;
+        case MT(MOD_LSFT, KC_S):
         case KC_S:
             SEND_STRING("chool");
             return false;
@@ -455,13 +458,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 case KC_LPRN: // Left parenthesis. Keycode: 55
 
                 case KC_BSPC: // Backspace. Keycode: 42
-                case 10282: // weird (backspace) keycode which only procuded when using MT(MOD_LGUI, KC_BSPC)
+                case MT(MOD_LGUI, KC_BSPC): // weird (backspace) keycode which only procuded when using MT(MOD_LGUI, KC_BSPC)
 
                 case KC_SPC: // Space. Keycode: 44
-                case 16940: // weird (space) keycode which only procuded when using LT(ARRWS,KC_SPC)
+                case LT(ARRWS,KC_SPC): // weird (space) keycode which only procuded when using LT(ARRWS,KC_SPC)
 
                 case KC_ENT: // Enter. Keycode: 40
-                case 12072: // weird (enter) keycode which only procuded when using HYPR_T(KC_ENTER)
+                case HYPR_T(KC_ENTER): // weird (enter) keycode which only procuded when using HYPR_T(KC_ENTER)
                     unregister_weak_mods(MOD_MASK_CSAG);
                     SEND_STRING("for");
                     return false;
