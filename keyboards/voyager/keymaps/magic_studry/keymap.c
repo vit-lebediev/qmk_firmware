@@ -69,10 +69,10 @@ enum tap_dance_codes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_voyager(
-    TD(DANCE_0),        KC_F1,              KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_MINUS,
-    KC_V,               KC_M,               KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT, KC_BSLS,
-    MT(MOD_LSFT, KC_S), KC_T,               KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,           MT(MOD_RSFT, KC_QUOTE),
-    MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K), KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH),MT(MOD_RCTL, KC_CAPS),
+    TD(DANCE_0),        KC_F1,              KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,                 KC_MINUS,
+    KC_V,               KC_M,               KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT,         KC_BSLS,
+    MT(MOD_LSFT, KC_S), KC_T,               KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,                   MT(MOD_RSFT, KC_QUOTE),
+    MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K), KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH), MT(MOD_RCTL, KC_CAPS),
                                                               HYPR_T(KC_ENTER),  MT(MOD_LGUI, KC_BSPC),                          QK_REP,   LT(ARRWS,KC_SPC)
   ),
   [NUMS] = LAYOUT_voyager(
@@ -96,7 +96,7 @@ const uint16_t PROGMEM combo_LTEST_12[] = { KC_1, KC_2, COMBO_END};
 const uint16_t PROGMEM combo_RT_12[] = { QK_REP, OSM(MOD_LSFT), COMBO_END};
 const uint16_t PROGMEM combo_LB_IM[] = { KC_J, KC_G, COMBO_END};
 const uint16_t PROGMEM combo_LB_MR[] = { KC_R, KC_D, COMBO_END};
-const uint16_t PROGMEM combo_LB_RP[] = { KC_T, KC_R, COMBO_END};
+const uint16_t PROGMEM combo_LB_RP[] = { KC_E, KC_A, COMBO_END};
 const uint16_t PROGMEM combo_LB_IR[] = { KC_K, KC_G, COMBO_END};
 const uint16_t PROGMEM combo_RB_IM[] = { KC_H, KC_QUOT, COMBO_END};
 const uint16_t PROGMEM combo_RB_MR[] = { KC_QUOT, KC_QUES, COMBO_END};
