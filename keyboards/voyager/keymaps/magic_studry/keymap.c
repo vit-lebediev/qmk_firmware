@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
-//#include "stdio.h"
+#include "stdio.h"
 
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
@@ -70,7 +70,7 @@ enum tap_dance_codes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_voyager(
     TD(DANCE_0),        KC_F1,              KC_F2,          KC_F3,           KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,                 KC_MINUS,
-    KC_V,               KC_M,               KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           KC_TRANSPARENT,         KC_BSLS,
+    KC_V,               KC_M,               KC_L,           KC_C,            KC_P,           KC_SCLN,                                        KC_B,           C_MAGIC,        KC_U,           KC_O,           TG(NUMS),               KC_BSLS,
     MT(MOD_LSFT, KC_S), KC_T,               KC_R,           KC_D,            KC_Y,           KC_Q,                                           KC_F,           KC_N,           KC_E,           KC_A,           KC_I,                   MT(MOD_RSFT, KC_QUOTE),
     MT(MOD_LCTL, KC_X), MT(MOD_LALT, KC_K), KC_J,           KC_G,            KC_W,           KC_TAB,                                         KC_Z,           KC_H,           KC_COMMA,       KC_DOT,         MT(MOD_RALT, KC_SLASH), MT(MOD_RCTL, KC_CAPS),
                                                               HYPR_T(KC_ENTER),  MT(MOD_LGUI, KC_BSPC),                          QK_REP,   LT(ARRWS,KC_SPC)
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESCAPE,        KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,                                          KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,
     KC_GRAVE,         KC_EXLM,        KC_AT,          KC_HASH,        KC_DLR,         KC_PERC,                                        KC_MINUS,       KC_7,           KC_8,           KC_9,           KC_SLASH,       KC_F12,
     TD(DANCE_1),      KC_CIRC,        KC_AMPR,        KC_ASTR,        KC_LPRN,        KC_RPRN,                                        KC_PLUS,        KC_4,           KC_5,           KC_6,           KC_ASTR,        MT(MOD_RSFT, KC_BSPC),
-    KC_TRANSPARENT,   KC_TRANSPARENT, KC_RBRC,        KC_LBRC,        KC_LCBR,        KC_RCBR,                                        KC_0,           KC_1,           KC_2,           KC_3,           KC_EQUAL,       KC_ENTER,
+    TG(NUMS),         KC_TRANSPARENT, KC_RBRC,        KC_LBRC,        KC_LCBR,        KC_RCBR,                                        KC_0,           KC_1,           KC_2,           KC_3,           KC_EQUAL,       KC_ENTER,
                                                               KC_TRANSPARENT,   KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_DOT
   ),
   [ARRWS] = LAYOUT_voyager(
@@ -353,6 +353,35 @@ bool process_magic_key_3(uint16_t prev_keycode, uint8_t prev_mods) {
 */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
+//    if (keycode == LT(NUMS,QK_REP)) {
+//        // handling my special case for LT(NUMS,QK_REP)
+//        if (record->event.pressed) {
+//            if (record->tap.count > 0) {
+//                // Tap event: trigger the repeat key (QK_REP)
+//
+//                // Debugging
+//                char buffer[64];
+//                sprintf(buffer, "Keycode: %d, QK_REP: %d\n", keycode, QK_REP);
+//                SEND_STRING(buffer);
+//
+//                tap_code16(QK_REP);
+////                register_code16(QK_REP);   // Send the key down
+////                unregister_code16(QK_REP); // Send the key up
+//                return false;
+//            } else {
+//                // Hold event: activate the NUMS layer
+//                layer_on(NUMS);
+//                return false;
+//            }
+//        } else {
+//            // On key release: turn off NUMS layer if held
+//            if (!record->tap.count) {
+//                layer_off(NUMS);
+//            }
+//            return false;
+//        }
+//    }
+
     if (record->event.pressed) {
         int rep_count = get_repeat_key_count();
         if (rep_count < -1 && keycode != MG_UST) {
@@ -360,6 +389,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         }
         switch (keycode) {
+//            case LT(NUMS,QK_REP):
+//                if (record->tap.count) {
+//                    // Debugging
+////                    char buffer[64];
+////                    sprintf(buffer, "Keycode: %d, last_kc: %d, last_mod: %d", keycode, get_last_keycode(), get_last_mods());
+////                    SEND_STRING(buffer);
+//                    // Repeat key used
+//                    // prev kc and mods
+////                    set_last_keycode(true_prev_keycode);
+////                    set_last_mods(true_prev_mods);
+//                    // register the repeat key
+//                    tap_code16(QK_REP);
+//                    return false;
+//                } else {
+//                    return true;
+//                }
             case C_MAG_2:
                 return process_magic_key_2(get_last_keycode(), get_last_mods());
             case C_MAG_3:
@@ -448,8 +493,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //        sprintf(buffer, "KC_DQUO: %d, KC_BSPC: %d, KC_LPRN: %d", KC_DQUO, KC_BSPC, KC_LPRN);
 //        SEND_STRING(buffer);
 
-        if (rep_count > 0) { // repeat key used
-            switch (keycode) {
+        if (rep_count > 0 || keycode == LT(NUMS, QK_REP)) { // repeat key used
+//            if (keycode == LT(NUMS, QK_REP)) {
+//                keycode = get_last_keycode();
+//            }
+
+            switch (keycode) { // when repeat pressed - keycode is repeated kc, not KC_REP?
                 case C_LCTL_BSPC: // ???
                 case C_LALT_ENT: // ???
                 case C_RSFT_ENT: // ???
